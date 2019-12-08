@@ -39,7 +39,7 @@ import MARKED from 'marked';
  */
 
 /**
- *
+ * Markdown powered TXT & HTML email sender
  */
 export class NrMailer {
 
@@ -68,7 +68,7 @@ export class NrMailer {
 	}
 
 	/**
-	 *
+	 * Returns default options for marked
 	 */
 	static getMarkedOptions () {
 
@@ -83,6 +83,24 @@ export class NrMailer {
 			smartypants: false,
 			langPrefix: 'lang-'
 		};
+
+	}
+
+	/**
+	 * Returns the subject, if found, from the markdown message.
+	 *
+	 * @param body {string}
+	 */
+	static getSubjectFromMarkdown (body) {
+
+		body = _.trim(body, ' \n\r\t');
+
+		const index = body.indexOf('\n');
+		if (index >= 0) {
+			body = body.substr(0, index);
+		}
+
+		return _.trim(body, '# \n\r\t');
 
 	}
 
@@ -135,7 +153,6 @@ export class NrMailer {
 
 	}
 
-	// noinspection JSUnusedGlobalSymbols
 	/**
 	 *
 	 * @returns {Promise}
@@ -146,7 +163,6 @@ export class NrMailer {
 
 	}
 
-	// noinspection JSUnusedGlobalSymbols
 	/** Send the email
 	 *
 	 * @param body {string}
@@ -285,24 +301,6 @@ export class NrMailer {
 	_transportClose () {
 
 		this._transport.close();
-
-	}
-
-	/**
-	 * Returns the subject, if found, from the markdown message.
-	 *
-	 * @param body {string}
-	 */
-	static getSubjectFromMarkdown (body) {
-
-		body = _.trim(body, ' \n\r\t');
-
-		const index = body.indexOf('\n');
-		if (index >= 0) {
-			body = body.substr(0, index);
-		}
-
-		return _.trim(body, '# \n\r\t');
 
 	}
 
