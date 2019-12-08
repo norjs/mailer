@@ -4,7 +4,7 @@
   "description": "Asynchronous HTML email sending with Markdown formating",
   "main": "src/NrMailer.js",
   "scripts": {
-    "test": "mocha -R spec tests/test-*.js"
+    "test": "mocha -r esm -R spec test/*.spec.js"
   },
   "directories": {
     "test": "test",
@@ -30,14 +30,15 @@
   "dependencies": {
     "@norjs/utils": "^1.0.18",
     "lodash": "^4.17.15",
-    "marked": "git://github.com/chjj/marked.git#master",
+    "marked": "^0.7.0",
     "nodemailer": "^4.7.0"
   },
   "devDependencies": {
+    "esm": "^3.2.25",
     "lint": "*",
     "mocha": "^5.2.0"
   },
   "engines": {
-    "node": ">=0.8"
+    "node": ">=12"
   }
 }

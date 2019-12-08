@@ -127,7 +127,7 @@ export class NrMailer {
 		if (subject !== undefined) {
 			AssertUtils.isString(subject);
 		} else {
-			subject = NrMailer._getSubjectFromMarkdown(body) || 'No subject';
+			subject = NrMailer.getSubjectFromMarkdown(body) || 'No subject';
 		}
 
 		const html = await this._marked(body, this._markedOptions);
@@ -250,7 +250,7 @@ export class NrMailer {
 	 * @param body {string}
 	 * @private
 	 */
-	static _getSubjectFromMarkdown (body) {
+	static getSubjectFromMarkdown (body) {
 
 		body = _.trim(body, ' \n\r\t');
 
