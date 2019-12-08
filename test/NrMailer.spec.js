@@ -119,7 +119,7 @@ describe('NrMailer', () => {
 
     });
 
-    describe('#close', () => {
+    describe('#closeMailer', () => {
 
         it('can close a mailer instance', async () => {
 
@@ -139,6 +139,59 @@ describe('NrMailer', () => {
             sinon.assert.notCalled(transportCloseStub);
 
             mailer.closeMailer();
+
+            sinon.assert.calledOnce(transportCloseStub);
+
+        });
+
+    });
+
+    describe('#destroy', () => {
+
+        it('does not close an non-open mailer instance', async () => {
+
+            createTransportStub.returns(TRANSPORT_MOCK);
+            getMarkedOptionsStub.returns(TEST_MARKER_OPTIONS);
+
+            const mailer = new NrMailer(TEST_SMTP_CONFIG, NODEMAILER_MOCK, MARKED);
+
+            AssertUtils.isInstanceOf(mailer, NrMailer);
+
+            sinon.assert.calledOnce(getMarkedOptionsStub);
+
+            sinon.assert.calledOnce(createTransportStub);
+            sinon.assert.calledWith(createTransportStub, "SMTP", TEST_SMTP_CONFIG);
+
+            sinon.assert.notCalled(MARKED);
+            sinon.assert.notCalled(transportCloseStub);
+
+            mailer.closeMailer();
+            sinon.assert.calledOnce(transportCloseStub);
+            transportCloseStub.resetHistory();
+
+            mailer.destroy();
+            sinon.assert.notCalled(transportCloseStub);
+
+        });
+
+        it('can close an open mailer instance', async () => {
+
+            createTransportStub.returns(TRANSPORT_MOCK);
+            getMarkedOptionsStub.returns(TEST_MARKER_OPTIONS);
+
+            const mailer = new NrMailer(TEST_SMTP_CONFIG, NODEMAILER_MOCK, MARKED);
+
+            AssertUtils.isInstanceOf(mailer, NrMailer);
+
+            sinon.assert.calledOnce(getMarkedOptionsStub);
+
+            sinon.assert.calledOnce(createTransportStub);
+            sinon.assert.calledWith(createTransportStub, "SMTP", TEST_SMTP_CONFIG);
+
+            sinon.assert.notCalled(MARKED);
+            sinon.assert.notCalled(transportCloseStub);
+
+            mailer.destroy();
 
             sinon.assert.calledOnce(transportCloseStub);
 

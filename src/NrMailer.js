@@ -138,6 +138,14 @@ export class NrMailer {
 		this._transport = this._nodemailer.createTransport("SMTP", smtp);
 
 		/**
+		 * If transport has been closed, this is `true`.
+		 *
+		 * @type {boolean}
+		 * @private
+		 */
+		this._transportClosed = false;
+
+		/**
 		 *
 		 * @type {{smartLists: boolean, tables: boolean, breaks: boolean, smartypants: boolean, langPrefix: string, pedantic: boolean, gfm: boolean, sanitize: boolean}}
 		 * @private
@@ -146,10 +154,30 @@ export class NrMailer {
 
 	}
 
-	/** Close mailer */
+	/** This method closes open mailer transport */
 	closeMailer () {
 
-		this._transportClose();
+		if (!this._transportClosed) {
+			this._transportClose();
+		}
+
+	}
+
+	/**
+	 * This method closes open mailer transport and destroys all references to outside from the object.
+	 *
+	 * You should not use this object again after you call this method.
+	 */
+	destroy () {
+
+		if (!this._transportClosed) {
+			this._transportClose();
+		}
+
+		this._nodemailer = undefined;
+		this._markedCall = undefined;
+		this._transport = undefined;
+		this._markedOptions = undefined;
 
 	}
 
@@ -301,6 +329,8 @@ export class NrMailer {
 	_transportClose () {
 
 		this._transport.close();
+
+		this._transportClosed = true;
 
 	}
 

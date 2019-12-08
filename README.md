@@ -48,7 +48,7 @@ async function example () {
         body: body
     });
 
-    await mailer.close();
+    await mailer.closeMailer();
 
     console.log('Email sent successfully.');
 
