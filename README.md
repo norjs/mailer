@@ -16,7 +16,7 @@ Sends HTML formated email with markdown text alternative.
 ```javascript
 import NrMailer from "@norjs/mailer";
 
-async function exampleFunction () {
+async function example () {
 
     const smtp_config = {
         "host": "smtp.example.com",
@@ -28,7 +28,7 @@ async function exampleFunction () {
         }
     };
 
-    const mailer = new NrMailer(smtp_config);
+    const mailer = NrMailer.createMailer(smtp_config);
 
     const body = 'The subject of the message\n'+
         '--------------------------\n'+

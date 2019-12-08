@@ -4,7 +4,7 @@
   "description": "Asynchronous HTML email sending with Markdown formating",
   "main": "src/NrMailer.js",
   "scripts": {
-    "test": "mocha -r esm -R spec test/*.spec.js"
+    "test": "mocha --full-trace -r esm -R spec test/*.spec.js"
   },
   "directories": {
     "test": "test",
@@ -36,7 +36,8 @@
   "devDependencies": {
     "esm": "^3.2.25",
     "lint": "*",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "sinon": "^7.5.0"
   },
   "engines": {
     "node": ">=12"

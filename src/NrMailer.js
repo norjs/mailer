@@ -25,6 +25,20 @@ import MARKED from 'marked';
  */
 
 /**
+ * @typedef {Object} NodeMailerSmtpAuthObject
+ * @property {string} user -
+ * @property {string} pass -
+ */
+
+/**
+ * @typedef {Object} NodeMailerSmtpObject
+ * @property {string} host -
+ * @property {number} port -
+ * @property {boolean} secureConnection -
+ * @property {NodeMailerSmtpAuthObject} auth -
+ */
+
+/**
  *
  */
 export class NrMailer {
@@ -35,6 +49,22 @@ export class NrMailer {
 	 */
 	static get nrName () {
 		return "NrMailer";
+	}
+
+	/**
+	 * Creates a mailer using global "nodemailer" and "marked" modules.
+	 *
+	 * @param smtp {NodeMailerSmtpObject} Options
+	 * @returns {NrMailer}
+	 */
+	static createMailer (smtp) {
+
+		if (!smtp) {
+			throw new TypeError(`${NrMailer.nrName}.createMailer(smtp): smtp option is required: "${smtp}"`);
+		}
+
+		return new NrMailer(smtp, NODEMAILER, MARKED);
+
 	}
 
 	/**
@@ -58,22 +88,36 @@ export class NrMailer {
 
 	/** The sending of an email message
 	 *
-	 * @param smtp
+	 * @param smtp {NodeMailerSmtpObject}
+	 * @param nodemailer {Object} The nodemailer library
+	 * @param marked {Function} The marked library
 	 */
-	constructor ({smtp} = {}) {
-
-		if (!smtp) {
-			throw new TypeError(`new ${NrMailer.nrName}: smtp option is required: "${smtp}"`);
-		}
+	constructor (smtp, nodemailer, marked) {
 
 		AssertUtils.isObject(smtp);
+		AssertUtils.isObject(nodemailer);
+		AssertUtils.isFunction(marked);
 
 		/**
 		 *
 		 * @member {Object}
 		 * @private
 		 */
-		this._transport = NODEMAILER.createTransport("SMTP", smtp);
+		this._nodemailer = nodemailer;
+
+		/**
+		 *
+		 * @member {Function}
+		 * @private
+		 */
+		this._markedCall = marked;
+
+		/**
+		 *
+		 * @member {Object}
+		 * @private
+		 */
+		this._transport = this._nodemailer.createTransport("SMTP", smtp);
 
 		/**
 		 *
@@ -85,7 +129,7 @@ export class NrMailer {
 	}
 
 	/** Close mailer */
-	close () {
+	closeMailer () {
 
 		this._transportClose();
 
@@ -150,7 +194,7 @@ export class NrMailer {
 	) {
 
 		return await new Promise((resolve, reject) => {
-			MARKED(markdownString, options, (err, result) => {
+			this._markedCall(markdownString, options, (err, result) => {
 				if (err) {
 					reject(err);
 				} else {
@@ -248,7 +292,6 @@ export class NrMailer {
 	 * Returns the subject, if found, from the markdown message.
 	 *
 	 * @param body {string}
-	 * @private
 	 */
 	static getSubjectFromMarkdown (body) {
 
