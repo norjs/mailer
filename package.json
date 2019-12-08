@@ -1,18 +1,18 @@
 {
-  "name": "nor-mailer",
+  "name": "@norjs/mailer",
   "version": "1.0.0",
   "description": "Asynchronous HTML email sending with Markdown formating",
-  "main": "lib/index.js",
+  "main": "src/NrMailer.js",
   "scripts": {
     "test": "mocha -R spec tests/test-*.js"
   },
   "directories": {
-    "test": "tests",
-    "lib": "lib"
+    "test": "test",
+    "src": "src"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Sendanor/nor-mailer.git"
+    "url": "https://github.com/norjs/mailer.git"
   },
   "keywords": [
     "email",
@@ -25,16 +25,13 @@
   "license": "MIT",
   "bugs": {
     "mail": "info@sendanor.com",
-    "url": "https://github.com/Sendanor/nor-mailer/issues"
+    "url": "https://github.com/norjs/mailer/issues"
   },
   "dependencies": {
+    "@norjs/utils": "^1.0.18",
+    "lodash": "^4.17.15",
     "marked": "git://github.com/chjj/marked.git#master",
-    "nodemailer": "^4.7.0",
-    "nor-extend": "^1.1.1",
-    "nor-fs": "^1.0.0",
-    "nor-is": "^1.0.1",
-    "prettified": ">= 0.0.7  < 0.1.0",
-    "q": ">= 1.0.1  < 1.2.0"
+    "nodemailer": "^4.7.0"
   },
   "devDependencies": {
     "lint": "*",
